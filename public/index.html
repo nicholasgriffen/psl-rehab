@@ -5,8 +5,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+    <script
+      src="https://unpkg.com/react@16/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: Nunito;
+        color: white;
+      }
+      .loadingLogo {
+        animation-name: spinEase;
+        animation-duration: 1200ms;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease;
+        animation-fill-mode: forwards;
+      }
+
+      @keyframes spinEase {
+        0% {
+          transform: rotate(-25deg);
+        }
+        50% {
+          transform: rotate(-25deg);
+        }
+        100% {
+          transform: rotate(335deg);
+        }
+      }
+
+      .background {
+        z-index: -1;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-image: radial-gradient(circle, #ff9634 0%, #862e04 100%);
+      }
+
+      .flexContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        padding-bottom: 50px;
+      }
+
+      h1 {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      button {
+        width: 243px;
+        height: 88px;
+        border-radius: 10px;
+      }
+
+      .green {
+        background-color: #1e7b1e;
+      }
+
+      .blue {
+        background-color: #215c71;
+      }
+    </style>
   </head>
   <body>
-    Your app works
+    <div id="react-app"></div>
   </body>
+  <script type="text/babel">
+    var app = document.getElementById("react-app");
+    var Home = function(props) {
+      var [didLoad, setDidLoad] = React.useState(false);
+      var [content, setContent] = React.useState(<Logo />);
+      function load() {
+        setTimeout(() => {
+          setContent(<StartPage handler={setContent} />);
+        }, 2500);
+      }
+      if (!didLoad) {
+        load();
+        setDidLoad(true);
+      }
+      return (
+        <div className="background flexContainer">
+          <h1>PSLREHAB</h1>
+          <div className="dynamicContent">{content}</div>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<Home />, app);
+
+    function StartPage({ handler }) {
+      return (
+        <button className="green" onClick={e => handleOrderClick(handler)}>
+          PSL ME
+        </button>
+      );
+    }
+
+    function MapPage({ handler }) {
+      function load() {
+        setTimeout(() => {
+          handler(<DonePage handler={handler} />);
+        }, 4000);
+      }
+      load();
+      return <button>MAP</button>;
+    }
+
+    function handleOrderClick(setState) {
+      setState(<MapPage handler={setState} />);
+    }
+
+    function Logo() {
+      return <img className="loadingLogo" src="logo.svg" />;
+    }
+
+    function DonePage() {
+      return <button className={"blue"}>Ready for More!!</button>;
+    }
+  </script>
 </html>
